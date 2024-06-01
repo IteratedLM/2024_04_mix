@@ -1,3 +1,7 @@
+# figures 2 and 4
+# takes the filename without the ".csv" as a command line argument 
+
+
 
 using CSV, DataFrames,Gadfly
 import Cairo, Fontconfig
@@ -25,14 +29,12 @@ function makeMatrix(df::DataFrame,type::String)
 
 end
 
-expressMatrix=makeMatrix(df,"e")
-composeMatrix=makeMatrix(df,"c")
-stableMatrix=makeMatrix(df,"s")
-aMatrix=makeMatrix(df,"a")
-bMatrix=makeMatrix(df,"b")
+matrices=[makeMatrix(df,"e"),makeMatrix(df,"c"),makeMatrix(df,"s"),makeMatrix(df,"a"),makeMatrix(df,"b")]
+names=["_express","_compose","_stable","_a","_b"]
+colors=[colorant"blue",colorant"orange",colorant"purple",colorant"red",colorant"red"]
+scale=0.5
 
-plotPropertyLinesScaled(expressMatrix,filename*"_express.png",colorant"blue","",0.5)
-plotPropertyLinesScaled(composeMatrix,filename*"_compose.png",colorant"orange","",0.5)
-plotPropertyLinesScaled(stableMatrix,filename*"_stable.png" ,colorant"purple","",0.5)
-plotPropertyLinesScaled(aMatrix,filename*"_a.png" ,colorant"red","",0.5)
-plotPropertyLinesScaled(bMatrix,filename*"_b.png" ,colorant"red","",0.5)
+for i in 1:5
+    plt=plotPropertyLines(matrices[i],colors[i],"","")
+    draw(PDF(filename*names[i]*".png",scale*2.5inch, scale*2inch),pdf)
+end
